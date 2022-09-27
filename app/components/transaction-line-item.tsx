@@ -10,7 +10,7 @@ const TransactionLineItem = ({
     <article className="flex justify-between">
       <div className="flex gap-3">
         <h4 className="self-center p-1 text-[32px] font-semibold">
-          {transaction.type}
+          {transaction.label}
         </h4>
         <div>
           <h3 className="pb-1 text-base font-medium text-slate-900">
@@ -18,15 +18,15 @@ const TransactionLineItem = ({
           </h3>
           <p
             className={clsx(
-              transaction.label === "need"
+              transaction.type === "need"
                 ? "bg-teal-600"
-                : transaction.label === "splurge"
+                : transaction.type === "splurge"
                 ? "bg-violet-500"
                 : "bg-red-600",
               "w-fit rounded-full px-2 py-1 text-xs font-medium text-white"
             )}
           >
-            {transaction.label}
+            {transaction.type}
           </p>
         </div>
       </div>

@@ -6,7 +6,8 @@ import * as React from "react";
 import { getUserId, createUserSession } from "~/utils/session.server";
 
 import { createUser, getUserByEmail } from "~/models/user.server";
-import { safeRedirect, validateEmail } from "~/utils";
+import { validateEmail } from "~/utils";
+import { Header } from "~/components/header";
 
 export async function loader({ request }: LoaderArgs) {
   const userId = await getUserId(request);
@@ -18,7 +19,6 @@ export async function action({ request }: ActionArgs) {
   const formData = await request.formData();
   const email = formData.get("email");
   const password = formData.get("password");
-  const redirectTo = safeRedirect(formData.get("redirectTo"), "/");
 
   if (!validateEmail(email)) {
     return json(
@@ -60,7 +60,7 @@ export async function action({ request }: ActionArgs) {
     request,
     userId: user.id,
     remember: false,
-    redirectTo,
+    redirectTo: "/welcome",
   });
 }
 
@@ -72,7 +72,6 @@ export const meta: MetaFunction = () => {
 
 export default function Join() {
   const [searchParams] = useSearchParams();
-  const redirectTo = searchParams.get("redirectTo") ?? undefined;
   const actionData = useActionData<typeof action>();
   const emailRef = React.useRef<HTMLInputElement>(null);
   const passwordRef = React.useRef<HTMLInputElement>(null);
@@ -86,15 +85,23 @@ export default function Join() {
   }, [actionData]);
 
   return (
-    <div className="flex min-h-full flex-col justify-center">
-      <div className="mx-auto w-full max-w-md px-8">
-        <Form method="post" className="space-y-6">
+    <div className="flex min-h-full justify-evenly">
+      <Header />
+      <div className="hidden flex-1 bg-gradient-to-tr from-black to-slate-800 sm:block" />
+      <div className="mx-auto flex w-full flex-1 flex-col px-5 pt-20 sm:items-center sm:justify-center sm:px-8 sm:pt-0">
+        <Form method="post" className="w-full space-y-5 sm:max-w-sm">
+          <h1 className="text-left text-4xl text-black sm:text-5xl">
+            Money Tracker
+          </h1>
+          <p className="!mt-2 text-base text-gray-500">
+            Join us to track down where you are spending.
+          </p>
           <div>
             <label
               htmlFor="email"
               className="block text-sm font-medium text-gray-700"
             >
-              Email address
+              Email
             </label>
             <div className="mt-1">
               <input
@@ -105,12 +112,13 @@ export default function Join() {
                 name="email"
                 type="email"
                 autoComplete="email"
+                placeholder="Enter your email"
                 aria-invalid={actionData?.errors?.email ? true : undefined}
                 aria-describedby="email-error"
-                className="w-full rounded border border-gray-500 px-2 py-1 text-lg"
+                className="w-full rounded-lg border-2 border-gray-300 px-3 py-[10px] text-base"
               />
               {actionData?.errors?.email && (
-                <div className="pt-1 text-red-700" id="email-error">
+                <div className="pt-1 text-red-500" id="email-error">
                   {actionData.errors.email}
                 </div>
               )}
@@ -130,10 +138,10 @@ export default function Join() {
                 ref={passwordRef}
                 name="password"
                 type="password"
-                autoComplete="new-password"
+                autoComplete="current-password"
                 aria-invalid={actionData?.errors?.password ? true : undefined}
                 aria-describedby="password-error"
-                className="w-full rounded border border-gray-500 px-2 py-1 text-lg"
+                className="w-full rounded-lg border-2 border-gray-300 px-3 py-[10px] text-base"
               />
               {actionData?.errors?.password && (
                 <div className="pt-1 text-red-700" id="password-error">
@@ -143,10 +151,9 @@ export default function Join() {
             </div>
           </div>
 
-          <input type="hidden" name="redirectTo" value={redirectTo} />
           <button
             type="submit"
-            className="w-full rounded bg-blue-500  py-2 px-4 text-white hover:bg-blue-600 focus:bg-blue-400"
+            className="w-full rounded-lg bg-gray-700  py-3 px-4 text-white hover:bg-gray-900 focus:bg-gray-500"
           >
             Create Account
           </button>
@@ -154,7 +161,7 @@ export default function Join() {
             <div className="text-center text-sm text-gray-500">
               Already have an account?{" "}
               <Link
-                className="text-blue-500 underline"
+                className="text-gray-700 underline"
                 to={{
                   pathname: "/login",
                   search: searchParams.toString(),

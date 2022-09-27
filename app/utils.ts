@@ -1,5 +1,15 @@
+import { json } from "@remix-run/node";
 import { useMatches } from "@remix-run/react";
+import {
+  differenceInCalendarDays,
+  format,
+  getDay,
+  isToday,
+  isYesterday,
+  startOfDay,
+} from "date-fns";
 import { useMemo } from "react";
+import type { TrakrHandle, TrakrTransaction } from "types";
 
 import type { User } from "~/models/user.server";
 
@@ -44,6 +54,15 @@ export function useMatchesData(
   return route?.data;
 }
 
+export function useHasMatch(id: string) {
+  const matchingRoutes = useMatches();
+  return useMemo(
+    () =>
+      matchingRoutes.some((route) => (route.handle as TrakrHandle)?.id === id),
+    [matchingRoutes, id]
+  );
+}
+
 function isUser(user: any): user is User {
   return user && typeof user === "object" && typeof user.email === "string";
 }
@@ -68,4 +87,82 @@ export function useUser(): User {
 
 export function validateEmail(email: unknown): email is string {
   return typeof email === "string" && email.length > 3 && email.includes("@");
+}
+
+export function formatMoney(amount: number) {
+  return new Intl.NumberFormat("en-US", {}).format(amount);
+}
+
+export function groupTransactions(transactions: TrakrTransaction[]) {
+  const groupedTransactions: Record<string, TrakrTransaction[]> = {};
+  transactions.forEach((transaction) => {
+    const date = startOfDay(new Date(transaction.createdAt));
+    const key = date.toISOString().split("T")[0];
+    if (!groupedTransactions[key]) {
+      groupedTransactions[key] = [];
+    }
+    groupedTransactions[key].push(transaction);
+  });
+
+  const array = Object.entries(groupedTransactions).map(([key, value]) => {
+    const transactions = value.sort((a, b) => {
+      return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+    });
+
+    return {
+      label: getRelativeDay(new Date(key)),
+      transactions,
+    };
+  });
+
+  return array;
+}
+
+/**
+ * Today
+ * Yesterday
+ * 2 days ago
+ * Last ${dayOfWeek} (if it's within the week)
+ * ${dayOfWeek}, ${month} ${dayOfMonth}
+ */
+
+export function getRelativeDay(date: Date) {
+  if (isToday(date)) {
+    return "Today";
+  }
+  if (isYesterday(date)) {
+    return "Yesterday";
+  }
+  if (differenceInCalendarDays(date, new Date()) <= 7) {
+    const day = getDay(date);
+    switch (day) {
+      case 0:
+        return "Last Sunday";
+      case 1:
+        return "Last Monday";
+      case 2:
+        return "Last Tuesday";
+      case 3:
+        return "Last Wednesday";
+      case 4:
+        return "Last Thursday";
+      case 5:
+        return "Last Friday";
+      case 6:
+        return "Last Saturday";
+      default:
+        return "Unknown Day";
+    }
+  }
+  return format(date, "EEEE, MMMM do");
+}
+
+export function badRequest<ActionData>(data: ActionData) {
+  return json(data, { status: 400 });
+}
+
+export function getErrorMessage(error: unknown) {
+  if (typeof error === "string") return error;
+  if (error instanceof Error) return error.message;
+  return "Unknown Error";
 }

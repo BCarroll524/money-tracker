@@ -97,7 +97,7 @@ export function groupTransactions(transactions: TrakrTransaction[]) {
   const groupedTransactions: Record<string, TrakrTransaction[]> = {};
   transactions.forEach((transaction) => {
     const date = startOfDay(new Date(transaction.createdAt));
-    const key = date.toISOString().split("T")[0];
+    const key = date.toISOString();
     if (!groupedTransactions[key]) {
       groupedTransactions[key] = [];
     }

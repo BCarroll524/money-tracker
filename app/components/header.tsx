@@ -1,14 +1,29 @@
-import { Bars3Icon } from "@heroicons/react/24/solid";
-import { Link } from "@remix-run/react";
-import * as Popover from "@radix-ui/react-popover";
+import {
+  ArrowPathIcon,
+  ArrowRightIcon,
+  Bars3Icon,
+  ChevronLeftIcon,
+} from "@heroicons/react/24/solid";
+import { Form, Link, useTransition } from "@remix-run/react";
+import * as Popover from "@radix-ui/react-dialog";
+import type { Variants } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
+import { useState } from "react";
+import {
+  ArrowLeftOnRectangleIcon,
+  CalendarDaysIcon,
+  BanknotesIcon,
+} from "@heroicons/react/24/outline";
+import { useOptionalUser } from "~/utils";
 
 const Header = () => {
+  const user = useOptionalUser();
   return (
     <header className="fixed top-0 left-0 right-0 flex items-center justify-between p-4 backdrop-blur-[2px]">
       <Link to="/" className="text-4xl font-semibold">
         💸
       </Link>
-      <MobileMenu />
+      {user ? <MobileMenu /> : null}
     </header>
   );
 };
@@ -16,16 +31,124 @@ const Header = () => {
 export { Header };
 
 const MobileMenu = () => {
+  const [open, setOpen] = useState(false);
+
+  const variants = {
+    hide: {
+      opacity: 0,
+      y: -15,
+    },
+    show: {
+      opacity: 1,
+      y: 0,
+    },
+  };
+
   return (
-    <Popover.Root modal={true}>
+    <Popover.Root open={open} onOpenChange={(val) => setOpen(val)}>
       <Popover.Trigger>
         <Bars3Icon className="h-6 w-6 stroke-slate-900" />
       </Popover.Trigger>
-      <Popover.Portal>
-        <Popover.Content>
-          <div className="h-3/4 w-full bg-black" />
-        </Popover.Content>
-      </Popover.Portal>
+      <AnimatePresence>
+        {open ? (
+          <Popover.Portal forceMount>
+            <Popover.Content>
+              <motion.div
+                className="fixed inset-0 bg-slate-900 px-5 pt-9"
+                initial={{ x: "100%" }}
+                animate={{ x: 0 }}
+                exit={{ x: "100%" }}
+                transition={{ duration: 0.25, ease: "easeInOut" }}
+              >
+                <button
+                  onClick={() => setOpen(false)}
+                  className="mb-8 flex items-center gap-4"
+                >
+                  <div className="rounded-xl bg-slate-700 p-2">
+                    <ChevronLeftIcon className="h-5 w-5 fill-white stroke-white" />
+                  </div>
+                  <h1 className="text-2xl font-semibold text-white">
+                    My Account
+                  </h1>
+                </button>
+                <motion.div
+                  initial="hide"
+                  animate="show"
+                  transition={{ delay: 0.4, staggerChildren: 0.1 }}
+                  className="flex flex-col gap-4"
+                >
+                  <MenuItem
+                    to="/"
+                    title="Add Recurring Transaction"
+                    variants={variants}
+                    icon={
+                      <ArrowPathIcon className="h-5 w-5 fill-white stroke-white" />
+                    }
+                  />
+                  <MenuItem
+                    to="/"
+                    title="Add Balances"
+                    variants={variants}
+                    icon={<BanknotesIcon className="h-5 w-5  stroke-white" />}
+                  />
+                  <MenuItem
+                    to="/"
+                    title="Calendar View"
+                    variants={variants}
+                    icon={
+                      <CalendarDaysIcon className="h-5 w-5  stroke-white" />
+                    }
+                  />
+                  <Logout variants={variants} />
+                </motion.div>
+              </motion.div>
+            </Popover.Content>
+          </Popover.Portal>
+        ) : null}
+      </AnimatePresence>
     </Popover.Root>
+  );
+};
+
+const MenuItem = ({
+  icon,
+  title,
+  to,
+  variants,
+}: {
+  icon: React.ReactNode;
+  title: string;
+  to: string;
+  variants: Variants;
+}) => {
+  return (
+    <motion.div variants={variants}>
+      <Link
+        to={to}
+        className="flex items-center justify-between rounded-lg bg-slate-700 px-3 py-4"
+      >
+        <div className="flex items-center gap-3">
+          {icon}
+          <h4 className="text-base font-medium text-white">{title}</h4>
+        </div>
+        <ArrowRightIcon className="h-5 w-5 fill-white stroke-white" />
+      </Link>
+    </motion.div>
+  );
+};
+
+const Logout = ({ variants }: { variants: Variants }) => {
+  return (
+    <motion.div variants={variants}>
+      <Form method="post" action="/logout">
+        <button
+          type="submit"
+          className="flex w-full items-center gap-3 rounded-lg bg-slate-700 px-3 py-4"
+        >
+          <ArrowLeftOnRectangleIcon className="h-5 w-5 stroke-red-500" />
+          <h4 className="text-base font-medium text-red-500">Logout</h4>
+        </button>
+      </Form>
+    </motion.div>
   );
 };

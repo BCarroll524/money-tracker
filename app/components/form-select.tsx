@@ -16,7 +16,7 @@ const FormSelect = ({
 }) => {
   const [selected, onSelect] = useState(options[0]);
   return (
-    <div className="flex flex-col gap-2 text-slate-900">
+    <div className="flex flex-col gap-1 text-slate-900">
       <label className="text-lg font-medium">{label}</label>
       <Select.Root
         name={name}
@@ -31,7 +31,7 @@ const FormSelect = ({
       >
         <Select.Trigger
           className={clsx(
-            "flex items-center justify-between rounded-lg border-2 bg-white p-4 focus:!outline-none",
+            "flex items-center justify-between rounded-lg border-2 bg-white py-3 px-4 focus:!outline-none",
             className
           )}
         >
@@ -41,14 +41,14 @@ const FormSelect = ({
             </p>
           </Select.Value>
           <Select.Icon asChild>
-            <ChevronDownIcon className="h-4 w-4 stroke-2 text-slate-900" />
+            <ChevronDownIcon className="h-4 w-4 stroke-slate-900 stroke-[3]" />
           </Select.Icon>
         </Select.Trigger>
 
         <Select.Portal>
           <Select.Content className="z-[9999] min-w-fit rounded-xl bg-gray-900 p-1 shadow-md">
             <Select.ScrollUpButton className="ml-auto mr-auto p-1">
-              <ChevronUpIcon className="h-4 w-4 stroke-2 text-white" />
+              <ChevronUpIcon className="h-4 w-4 stroke-white stroke-2" />
             </Select.ScrollUpButton>
             <Select.Viewport>
               {options.map((option, index) => (
@@ -60,7 +60,7 @@ const FormSelect = ({
               ))}
             </Select.Viewport>
             <Select.ScrollDownButton className="ml-auto mr-auto p-1">
-              <ChevronDownIcon className="h-4 w-4 stroke-2 text-white" />
+              <ChevronDownIcon className="h-4 w-4 stroke-white stroke-2" />
             </Select.ScrollDownButton>
           </Select.Content>
         </Select.Portal>

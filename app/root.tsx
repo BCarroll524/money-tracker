@@ -14,7 +14,6 @@ import clsx from "clsx";
 import tailwindStylesheetUrl from "./styles/app.css";
 import globalStyles from "./styles/reset.css";
 import fontStyles from "./styles/font.css";
-import { useHasMatch } from "./utils";
 import { getUser } from "./utils/session.server";
 import type { TrakrHandle } from "types";
 

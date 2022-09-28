@@ -1,12 +1,10 @@
-import { ChevronDownIcon, ChevronUpIcon } from "@heroicons/react/24/outline";
-import * as Select from "@radix-ui/react-select";
 import * as RadioGroupPrimitive from "@radix-ui/react-radio-group";
 import clsx from "clsx";
-import React, { useState } from "react";
+import { useState } from "react";
 import type { TrakrHandle } from "types";
-import { Form, useActionData, useLoaderData } from "@remix-run/react";
+import { Form, Link, useActionData, useLoaderData } from "@remix-run/react";
 import { Header } from "~/components/header";
-import { CheckIcon } from "@heroicons/react/24/solid";
+import { CheckIcon, XMarkIcon } from "@heroicons/react/24/solid";
 import { requireUser } from "~/utils/session.server";
 import type { ActionArgs, LoaderArgs } from "@remix-run/node";
 import { redirect } from "@remix-run/node";
@@ -14,6 +12,8 @@ import { json } from "@remix-run/node";
 import { getUsersSources } from "~/models/user.server";
 import { createTransaction } from "~/models/transaction.server";
 import { getErrorMessage } from "~/utils";
+import { FormInput } from "~/components/form-input";
+import { FormSelect } from "~/components/form-select";
 
 export const handle: TrakrHandle & { id: string } = {
   id: "new-transaction",
@@ -63,9 +63,9 @@ export default function NewTransaction() {
   const data = useLoaderData<typeof loader>();
   const actionData = useActionData<typeof action>();
   return (
-    <section className="min-h-full px-5 pt-20 pb-8">
+    <section className="min-h-full px-5 pt-[72px] pb-8">
       <Header />
-      <h1 className="pb-4 text-2xl font-medium text-slate-900">
+      <h1 className="pb-3 text-2xl font-medium text-slate-900">
         New Transaction Details
       </h1>
       {actionData?.error ? (
@@ -132,40 +132,23 @@ export default function NewTransaction() {
           label="Category"
           name="category"
         />
-        <button className="mt-8 flex w-full flex-1 items-center justify-between rounded-lg bg-slate-700 py-2 px-3 text-white">
-          <span className="text-base font-semibold uppercase">create</span>
-          <CheckIcon className="h-5 w-5 text-white" />
-        </button>
+        <div className="mt-8 flex flex-col gap-3">
+          <button className="flex w-full flex-1 items-center justify-between rounded-lg bg-slate-700 py-2 px-3 text-white">
+            <span className="text-base font-semibold uppercase">create</span>
+            <CheckIcon className="h-5 w-5 stroke-white" />
+          </button>
+          <Link
+            to="/"
+            className="flex w-full flex-1 items-center justify-between rounded-lg bg-red-500 py-2 px-3 text-white"
+          >
+            <span className="text-base font-semibold uppercase">cancel</span>
+            <XMarkIcon className="h-5 w-5 stroke-white" />
+          </Link>
+        </div>
       </Form>
     </section>
   );
 }
-
-const FormInput = ({
-  label,
-  name,
-  type = "text",
-  placeholder,
-  ...rest
-}: {
-  label: string;
-  name: string;
-  type?: "text" | "number";
-  placeholder: string;
-} & React.HTMLProps<HTMLInputElement>) => {
-  return (
-    <div className="flex flex-col gap-2 text-slate-900 focus-within:outline-slate-500">
-      <label className="text-lg font-medium">{label}</label>
-      <input
-        type={type}
-        name={name}
-        placeholder={placeholder}
-        className="rounded-lg bg-white p-4 font-inter placeholder:text-gray-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-slate-500"
-        {...rest}
-      />
-    </div>
-  );
-};
 
 const FormTextarea = ({
   label,
@@ -187,83 +170,6 @@ const FormTextarea = ({
     </div>
   );
 };
-
-const FormSelect = ({
-  label,
-  name,
-  options,
-  className,
-}: {
-  label: string;
-  name: string;
-  options: { label: string; value: string }[];
-  className?: string;
-}) => {
-  const [selected, onSelect] = useState(options[0]);
-  return (
-    <div className="flex flex-col gap-2 text-slate-900">
-      <label className="text-lg font-medium">{label}</label>
-      <Select.Root
-        name={name}
-        value={selected.value}
-        onValueChange={(v) => {
-          const option = options.find((o) => o.value === v);
-
-          if (option) {
-            onSelect(option);
-          }
-        }}
-      >
-        <Select.Trigger
-          className={clsx(
-            "flex items-center justify-between rounded-lg border-2 bg-white p-4 focus:!outline-none",
-            className
-          )}
-        >
-          <Select.Value asChild className="flex items-center">
-            <p className="text-lg font-medium text-slate-900">
-              {selected.label}
-            </p>
-          </Select.Value>
-          <Select.Icon asChild>
-            <ChevronDownIcon className="h-4 w-4 stroke-2 text-slate-900" />
-          </Select.Icon>
-        </Select.Trigger>
-
-        <Select.Portal>
-          <Select.Content className="z-[9999] min-w-fit rounded-xl bg-gray-900 p-1 shadow-md">
-            <Select.ScrollUpButton className="ml-auto mr-auto p-1">
-              <ChevronUpIcon className="h-4 w-4 stroke-2 text-white" />
-            </Select.ScrollUpButton>
-            <Select.Viewport>
-              {options.map((option, index) => (
-                <SelectItem
-                  key={index}
-                  label={option.label}
-                  value={option.value}
-                />
-              ))}
-            </Select.Viewport>
-            <Select.ScrollDownButton className="ml-auto mr-auto p-1">
-              <ChevronDownIcon className="h-4 w-4 stroke-2 text-white" />
-            </Select.ScrollDownButton>
-          </Select.Content>
-        </Select.Portal>
-      </Select.Root>
-    </div>
-  );
-};
-
-const SelectItem = ({ label, value }: { label: string; value: string }) => (
-  <Select.Item
-    value={value}
-    className="group flex w-full items-center justify-center gap-6 rounded-lg py-2 outline-none hover:bg-gray-700 focus-visible:!outline-none"
-  >
-    <Select.ItemText>
-      <p className="text-center text-lg font-medium text-white">{label}</p>
-    </Select.ItemText>
-  </Select.Item>
-);
 
 const FormRadioGroup = ({
   label,

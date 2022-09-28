@@ -71,7 +71,7 @@ export default function Home() {
         <p className="text-base font-semibold uppercase text-white">
           add transaction
         </p>
-        <ArrowSmallRightIcon className="h-4 w-4 text-white" />
+        <ArrowSmallRightIcon className="h-4 w-4 fill-white stroke-white" />
       </Link>
       <div className="w-full border-t-2 border-slate-300 pb-3" />
       <div className="px-5">

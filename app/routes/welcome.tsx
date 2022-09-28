@@ -12,7 +12,7 @@ import {
   useSearchParams,
 } from "@remix-run/react";
 import clsx from "clsx";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import type { TrakrHandle, TrakrSource } from "types";
 import { FormInput } from "~/components/form-input";
 import { FormSelect } from "~/components/form-select";
@@ -34,7 +34,6 @@ export const loader = async ({ request }: LoaderArgs) => {
 
 export const action = async ({ request }: ActionArgs) => {
   const form = new URLSearchParams(await request.text());
-  console.log({ form });
 
   const action = form.get("_action");
   if (action === "onboarding") {
@@ -64,7 +63,12 @@ export const action = async ({ request }: ActionArgs) => {
   }
 
   if (action === "complete-payment") {
-    return redirect("/");
+    const user = await requireUser(request);
+    const paymentMethods = await getUsersSources(user.id);
+    if (paymentMethods.length) {
+      return redirect("/");
+    }
+    return redirect("/welcome?page=3");
   }
 
   return null;
@@ -192,6 +196,7 @@ const Welcome2 = () => {
             name="fullName"
             label="Name"
             placeholder="John Doe"
+            autoFocus
             defaultValue={name}
           />
         </Form>
@@ -203,13 +208,22 @@ const Welcome2 = () => {
 
 const Welcome3 = ({ paymentMethods }: { paymentMethods: TrakrSource[] }) => {
   const fetcher = useFetcher();
-  const ref = useRef<HTMLFormElement>(null);
+  const formRef = useRef<HTMLFormElement>(null);
+  const nicknameRef = useRef<HTMLInputElement>(null);
   const [formValues, setFormValues] = useState({
     paymentNickname: "",
     type: "credit_card",
   });
   const isFormComplete = formValues.paymentNickname && formValues.type;
   const nextDisabled = !paymentMethods.length;
+
+  const isSubmitting = fetcher.state === "submitting";
+  useEffect(() => {
+    if (!isSubmitting) {
+      formRef.current?.reset();
+      nicknameRef.current?.focus();
+    }
+  }, [isSubmitting]);
   return (
     <>
       <div className="flex-1 text-slate-900">
@@ -232,7 +246,7 @@ const Welcome3 = ({ paymentMethods }: { paymentMethods: TrakrSource[] }) => {
           </p>
         </div>
         <fetcher.Form
-          ref={ref}
+          ref={formRef}
           method="post"
           id="welcome-form"
           className="flex flex-col gap-4 px-5"
@@ -247,6 +261,7 @@ const Welcome3 = ({ paymentMethods }: { paymentMethods: TrakrSource[] }) => {
           <PaymentMethods paymentMethods={paymentMethods} />
           <input type="hidden" name="_action" value="complete-payment" />
           <FormInput
+            ref={nicknameRef}
             name="paymentNickname"
             label="Payment Nickname"
             placeholder="Chase Credit Card"

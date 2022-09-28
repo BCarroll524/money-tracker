@@ -27,7 +27,9 @@ export const links: LinksFunction = () => {
 
 export const meta: MetaFunction = () => ({
   charset: "utf-8",
-  title: "Money Trakr",
+  title: "Transaction Tracker",
+  description:
+    "Everyone wants more financially. We are here to help you start! We do this by allowing you to keep track of your spending and being able to visualize your habits.",
   viewport: "width=device-width,initial-scale=1",
 });
 

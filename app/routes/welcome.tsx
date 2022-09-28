@@ -29,7 +29,7 @@ export const loader = async ({ request }: LoaderArgs) => {
   const user = await requireUser(request);
   const paymentMethods = await getUsersSources(user.id);
 
-  return json({ paymentMethods });
+  return json({ paymentMethods, name: user.name });
 };
 
 export const action = async ({ request }: ActionArgs) => {
@@ -87,7 +87,7 @@ export default function Welcome() {
       {page === 1 ? (
         <Welcome1 />
       ) : page === 2 ? (
-        <Welcome2 />
+        <Welcome2 defaultName={data.name}/>
       ) : (
         <Welcome3 paymentMethods={data.paymentMethods} />
       )}
@@ -170,8 +170,8 @@ const Welcome1 = () => {
   );
 };
 
-const Welcome2 = () => {
-  const [name, setName] = useState("");
+const Welcome2 = ({defaultName}: {defaultName: string | undefined}) => {
+  const [name, setName] = useState(defaultName || '');
   return (
     <>
       <div className="flex-1 text-slate-900">

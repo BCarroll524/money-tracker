@@ -64,12 +64,6 @@ export async function action({ request }: ActionArgs) {
   });
 }
 
-export const meta: MetaFunction = () => {
-  return {
-    title: "Sign Up",
-  };
-};
-
 export default function Join() {
   const [searchParams] = useSearchParams();
   const actionData = useActionData<typeof action>();

@@ -4,7 +4,7 @@ import {
   Bars3Icon,
   ChevronLeftIcon,
 } from "@heroicons/react/24/solid";
-import { Form, Link, useTransition } from "@remix-run/react";
+import { Form, Link } from "@remix-run/react";
 import * as Popover from "@radix-ui/react-dialog";
 import type { Variants } from "framer-motion";
 import { AnimatePresence, motion } from "framer-motion";
@@ -15,11 +15,17 @@ import {
   BanknotesIcon,
 } from "@heroicons/react/24/outline";
 import { useOptionalUser } from "~/utils";
+import clsx from "clsx";
 
 const Header = () => {
   const user = useOptionalUser();
   return (
-    <header className="fixed top-0 left-0 right-0 flex items-center justify-between p-4 backdrop-blur-[2px]">
+    <header
+      className={clsx(
+        "fixed top-0 left-0 right-0 flex items-center justify-between p-4",
+        user && "backdrop-blur-[2px]"
+      )}
+    >
       <Link to="/" className="text-4xl font-semibold">
         💸
       </Link>
@@ -47,14 +53,14 @@ const MobileMenu = () => {
   return (
     <Popover.Root open={open} onOpenChange={(val) => setOpen(val)}>
       <Popover.Trigger>
-        <Bars3Icon className="h-6 w-6 stroke-slate-900" />
+        <Bars3Icon className="h-6 w-6 fill-white stroke-white" />
       </Popover.Trigger>
       <AnimatePresence>
         {open ? (
           <Popover.Portal forceMount>
             <Popover.Content>
               <motion.div
-                className="fixed inset-0 bg-slate-900 px-5 pt-9"
+                className="fixed inset-0 bg-black-100 px-5 pt-9"
                 initial={{ x: "100%" }}
                 animate={{ x: 0 }}
                 exit={{ x: "100%" }}
@@ -64,7 +70,7 @@ const MobileMenu = () => {
                   onClick={() => setOpen(false)}
                   className="mb-8 flex items-center gap-4"
                 >
-                  <div className="rounded-xl bg-slate-700 p-2">
+                  <div className="rounded-xl bg-black-300 p-2">
                     <ChevronLeftIcon className="h-5 w-5 fill-white stroke-white" />
                   </div>
                   <h1 className="text-2xl font-semibold text-white">
@@ -125,7 +131,7 @@ const MenuItem = ({
     <motion.div variants={variants}>
       <Link
         to={to}
-        className="flex items-center justify-between rounded-lg bg-slate-700 px-3 py-4"
+        className="flex items-center justify-between rounded-lg bg-black-200 px-3 py-4"
       >
         <div className="flex items-center gap-3">
           {icon}
@@ -143,10 +149,10 @@ const Logout = ({ variants }: { variants: Variants }) => {
       <Form method="post" action="/logout">
         <button
           type="submit"
-          className="flex w-full items-center gap-3 rounded-lg bg-slate-700 px-3 py-4"
+          className="flex w-full items-center gap-3 rounded-lg bg-black-200 px-3 py-4"
         >
-          <ArrowLeftOnRectangleIcon className="h-5 w-5 stroke-red-500" />
-          <h4 className="text-base font-medium text-red-500">Logout</h4>
+          <ArrowLeftOnRectangleIcon className="h-5 w-5 stroke-red" />
+          <h4 className="text-base font-medium text-red">Logout</h4>
         </button>
       </Form>
     </motion.div>

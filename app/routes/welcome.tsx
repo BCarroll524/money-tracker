@@ -80,14 +80,14 @@ export default function Welcome() {
   const page = Number(searchParams.get("page") || "1");
   return (
     <section className="flex min-h-full flex-col pt-20 pb-[75px]">
-      <h1 className="text-center text-4xl font-semibold text-slate-900">
+      <h1 className="text-center text-4xl font-semibold text-white">
         Transaction Tracker
       </h1>
 
       {page === 1 ? (
         <Welcome1 />
       ) : page === 2 ? (
-        <Welcome2 defaultName={data.name}/>
+        <Welcome2 defaultName={data.name} />
       ) : (
         <Welcome3 paymentMethods={data.paymentMethods} />
       )}
@@ -107,19 +107,19 @@ const OnboardingNav = ({
   return (
     <div className="flex w-full items-center px-8">
       <p
-        className="text-lg font-semibold text-slate-500"
+        className="text-lg font-semibold text-purple"
         onClick={() => navigate(-1)}
       >
         Back
       </p>
       <Pagination page={page} />
       {nextDisabled ? (
-        <p className="text-lg font-semibold text-slate-500">{nextText}</p>
+        <p className="text-lg font-semibold text-purple">{nextText}</p>
       ) : (
         <button
           form="welcome-form"
           type="submit"
-          className="text-lg font-semibold text-slate-900"
+          className="text-lg font-semibold text-white"
         >
           {nextText}
         </button>
@@ -132,7 +132,7 @@ const Pagination = ({ page }: { page: number }) => {
   const getClassNames = (index: number) => {
     const isActive = index === page;
     return clsx(
-      "rounded-sm bg-slate-900",
+      "rounded-sm bg-white",
       isActive ? "w-[10px] h-[10px]" : "w-2 h-2 opacity-40"
     );
   };
@@ -148,7 +148,7 @@ const Pagination = ({ page }: { page: number }) => {
 const Welcome1 = () => {
   return (
     <>
-      <div className="flex-1 px-8 text-slate-900">
+      <div className="flex-1 px-8 text-white">
         <div className="px-2 pt-[88px] pb-[82px]">
           <img src="/images/welcome-1.png" alt="Welcome 1" />
         </div>
@@ -170,11 +170,11 @@ const Welcome1 = () => {
   );
 };
 
-const Welcome2 = ({defaultName}: {defaultName: string | undefined}) => {
-  const [name, setName] = useState(defaultName || '');
+const Welcome2 = ({ defaultName }: { defaultName: string | undefined }) => {
+  const [name, setName] = useState(defaultName || "");
   return (
     <>
-      <div className="flex-1 text-slate-900">
+      <div className="flex-1 text-white">
         <div className="px-10 pt-[88px] pb-[82px]">
           <img src="/images/welcome-2.png" alt="Welcome 2" />
         </div>
@@ -226,7 +226,7 @@ const Welcome3 = ({ paymentMethods }: { paymentMethods: TrakrSource[] }) => {
   }, [isSubmitting]);
   return (
     <>
-      <div className="flex-1 text-slate-900">
+      <div className="flex-1 text-white">
         <div className="pt-9 pb-6">
           <img
             src="/images/welcome-3.png"
@@ -351,7 +351,7 @@ const PaymentMethod = ({
         "flex items-center justify-between px-3 py-2 text-white",
         isTop ? "rounded-t-[4px]" : "",
         isBottom ? "rounded-b-[4px]" : "",
-        index % 2 === 0 ? "bg-sky-800" : "bg-slate-500"
+        index % 2 === 0 ? "bg-sky-800" : "bg-purple"
       )}
     >
       {type === "bank_account" ? (

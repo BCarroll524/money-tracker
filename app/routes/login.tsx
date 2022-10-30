@@ -1,4 +1,4 @@
-import type { ActionArgs, LoaderArgs, MetaFunction } from "@remix-run/node";
+import type { ActionArgs, LoaderArgs } from "@remix-run/node";
 import { json, redirect } from "@remix-run/node";
 import { Form, Link, useActionData, useSearchParams } from "@remix-run/react";
 import * as React from "react";
@@ -7,6 +7,12 @@ import { createUserSession, getUserId } from "~/utils/session.server";
 import { verifyLogin } from "~/models/user.server";
 import { safeRedirect, validateEmail } from "~/utils";
 import { Header } from "~/components/header";
+import type { TrakrHandle } from "types";
+
+export const handle: TrakrHandle & { id: string } = {
+  id: "login",
+  backgroundColor: "bg-black-300",
+};
 
 export async function loader({ request }: LoaderArgs) {
   const userId = await getUserId(request);
@@ -77,19 +83,19 @@ export default function LoginPage() {
   return (
     <div className="flex min-h-full justify-evenly">
       <Header />
-      <div className="hidden flex-1 bg-gradient-to-tr from-black to-slate-800 sm:block" />
+      <div className="hidden flex-1 bg-gradient-to-tr from-black-300 via-black-200  to-purple sm:block" />
       <div className="mx-auto flex w-full flex-1 flex-col px-5 pt-20 sm:items-center sm:justify-center sm:px-8 sm:pt-0">
         <Form method="post" className="w-full space-y-5 sm:max-w-sm">
-          <h1 className="text-left text-4xl text-black sm:text-5xl">
+          <h1 className="text-left text-4xl text-white sm:text-5xl">
             Welcome back
           </h1>
-          <p className="!mt-2 text-base text-gray-500">
+          <p className="!mt-2 text-base text-gray-100">
             Welcome back. Please enter you details.
           </p>
           <div>
             <label
               htmlFor="email"
-              className="block text-sm font-medium text-gray-700"
+              className="block text-sm font-medium text-gray-200"
             >
               Email
             </label>
@@ -105,10 +111,10 @@ export default function LoginPage() {
                 placeholder="Enter your email"
                 aria-invalid={actionData?.errors?.email ? true : undefined}
                 aria-describedby="email-error"
-                className="w-full rounded-lg border-2 border-gray-300 px-3 py-[10px] text-base"
+                className="w-full rounded-lg bg-black-100 px-3 py-[10px] text-white  placeholder:text-gray-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-purple"
               />
               {actionData?.errors?.email && (
-                <div className="pt-1 text-red-500" id="email-error">
+                <div className="pt-1 text-red" id="email-error">
                   {actionData.errors.email}
                 </div>
               )}
@@ -118,7 +124,7 @@ export default function LoginPage() {
           <div>
             <label
               htmlFor="password"
-              className="block text-sm font-medium text-gray-700"
+              className="block text-sm font-medium text-gray-200"
             >
               Password
             </label>
@@ -131,10 +137,10 @@ export default function LoginPage() {
                 autoComplete="current-password"
                 aria-invalid={actionData?.errors?.password ? true : undefined}
                 aria-describedby="password-error"
-                className="w-full rounded-lg border-2 border-gray-300 px-3 py-[10px] text-base"
+                className="w-full rounded-lg bg-black-100 px-3 py-[10px] text-white placeholder:text-gray-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-purple"
               />
               {actionData?.errors?.password && (
-                <div className="pt-1 text-red-700" id="password-error">
+                <div className="text-red-700 pt-1" id="password-error">
                   {actionData.errors.password}
                 </div>
               )}
@@ -147,10 +153,7 @@ export default function LoginPage() {
               type="checkbox"
               className="h-4 w-4 rounded-lg border-gray-300 text-blue-600 focus:ring-blue-500"
             />
-            <label
-              htmlFor="remember"
-              className="ml-2 block text-sm text-gray-900"
-            >
+            <label htmlFor="remember" className="ml-2 block text-sm text-white">
               Remember me
             </label>
           </div>
@@ -158,15 +161,15 @@ export default function LoginPage() {
           <input type="hidden" name="redirectTo" value={redirectTo} />
           <button
             type="submit"
-            className="w-full rounded-lg bg-gray-700  py-3 px-4 text-white hover:bg-gray-900 focus:bg-gray-500"
+            className="w-full rounded-lg bg-purple  py-3 px-4 text-white hover:bg-gray-900 focus:outline-offset-1 focus:outline-purple"
           >
             Sign in
           </button>
 
-          <div className="pt-4 text-center text-sm text-gray-500">
+          <div className="pt-4 text-center text-sm text-gray-100">
             Don't have an account?{" "}
             <Link
-              className="text-gray-700 underline"
+              className="text-gray-100 underline"
               to={{
                 pathname: "/join",
                 search: searchParams.toString(),

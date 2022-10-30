@@ -6,6 +6,7 @@ import {
   getDay,
   isToday,
   isYesterday,
+  parse,
   startOfDay,
 } from "date-fns";
 import { useMemo } from "react";
@@ -97,7 +98,7 @@ export function groupTransactions(transactions: TrakrTransaction[]) {
   const groupedTransactions: Record<string, TrakrTransaction[]> = {};
   transactions.forEach((transaction) => {
     const date = startOfDay(new Date(transaction.createdAt));
-    const key = date.toISOString();
+    const key = format(date, "yyyy-MM-dd");
     if (!groupedTransactions[key]) {
       groupedTransactions[key] = [];
     }
@@ -106,11 +107,13 @@ export function groupTransactions(transactions: TrakrTransaction[]) {
 
   const array = Object.entries(groupedTransactions).map(([key, value]) => {
     const transactions = value.sort((a, b) => {
-      return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+      const aDate = Number(format(new Date(a.createdAt), "T"));
+      const bDate = Number(format(new Date(b.createdAt), "T"));
+      return aDate - bDate;
     });
 
     return {
-      label: getRelativeDay(new Date(key)),
+      label: getRelativeDay(parse(key, "yyyy-MM-dd", new Date())),
       transactions,
     };
   });
@@ -133,7 +136,7 @@ export function getRelativeDay(date: Date) {
   if (isYesterday(date)) {
     return "Yesterday";
   }
-  if (differenceInCalendarDays(date, new Date()) <= 7) {
+  if (differenceInCalendarDays(new Date(), date) <= 7) {
     const day = getDay(date);
     switch (day) {
       case 0:

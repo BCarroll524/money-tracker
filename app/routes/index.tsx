@@ -15,7 +15,7 @@ import { requireUser } from "~/utils/session.server";
 
 export const handle: TrakrHandle & { id: string } = {
   id: "home",
-  backgroundColor: "bg-slate-200",
+  backgroundColor: "bg-black-300",
 };
 
 export const loader = async ({ request }: LoaderArgs) => {
@@ -54,27 +54,29 @@ export default function Home() {
   return (
     <section>
       <Header />
-      <div className="flex flex-col items-center justify-center pt-[68px] text-slate-900">
-        <h1 className="text-2xl font-bold uppercase">Total Spent</h1>
-        <p className="text-xl font-bold">
+      <div className="flex flex-col items-center justify-center pt-[68px] text-white">
+        <h1 className="text-2xl font-semibold uppercase tracking-wide">
+          Total Spent
+        </h1>
+        <p className="text-xl font-bold tracking-wide">
           ${formatMoney(Number(totalSpent[0]))}
           <span className="text-xs font-bold">.{totalSpent[1]}</span>
         </p>
-        <p className="text-sm font-semibold text-green-600">
+        <p className="text-sm font-semibold text-green">
           + ${Number(formatMoney(spendingDiff / 100)).toFixed(2)} - Today
         </p>
       </div>
       <Link
         to="/transaction/new"
-        className="mx-auto mt-3 mb-5 flex w-fit items-center justify-center gap-2 rounded-lg bg-slate-700 py-1 px-3"
+        className="mx-auto mt-3 mb-5 flex w-fit items-center justify-center gap-2 rounded-lg bg-black-100 py-1 px-3"
       >
         <p className="text-base font-semibold uppercase text-white">
           add transaction
         </p>
         <ArrowSmallRightIcon className="h-4 w-4 fill-white stroke-white" />
       </Link>
-      <div className="w-full border-t-2 border-slate-300 pb-3" />
-      <div className="px-5">
+      <div className="w-full border-t-2 border-gray-200" />
+      <div>
         {data.transactions.length ? (
           transactionGroups.map((groups, index) => (
             <TransactionsGrouped
@@ -84,7 +86,7 @@ export default function Home() {
             />
           ))
         ) : (
-          <p className="px-6 pt-5 text-center text-lg font-medium text-slate-900">
+          <p className="px-6 pt-5 text-center text-lg font-medium text-white">
             You have not recorded any transactions yet. Click the button above
             to add to today's spending!
           </p>

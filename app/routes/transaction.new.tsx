@@ -14,10 +14,12 @@ import { createTransaction } from "~/models/transaction.server";
 import { getErrorMessage } from "~/utils";
 import { FormInput } from "~/components/form-input";
 import { FormSelect } from "~/components/form-select";
+import { FormDatePicker } from "~/components/form-date";
+import { format, parse } from "date-fns";
 
 export const handle: TrakrHandle & { id: string } = {
   id: "new-transaction",
-  backgroundColor: "bg-slate-200",
+  backgroundColor: "bg-black-300",
 };
 
 export const loader = async ({ request }: LoaderArgs) => {
@@ -35,6 +37,8 @@ export const action = async ({ request }: ActionArgs) => {
   const sourceId = form.get("sourceId");
   const type = form.get("type");
   const category = form.get("category");
+  const date = form.get("date") || format(new Date(), "T");
+  const transactionDate = parse(date, "T", new Date());
 
   if (!name || !amount || !sourceId || !type || !category) {
     return json({ error: "Please fill out all form fields" }, { status: 400 });
@@ -50,6 +54,7 @@ export const action = async ({ request }: ActionArgs) => {
       type,
       label: category,
       userId: user.id,
+      date: transactionDate,
     });
 
     return redirect("/?tId=" + transaction.id);
@@ -65,14 +70,15 @@ export default function NewTransaction() {
   return (
     <section className="min-h-full px-5 pt-[72px] pb-8">
       <Header />
-      <h1 className="pb-3 text-2xl font-medium text-slate-900">
+      <h1 className="pb-3 text-2xl font-medium text-white">
         New Transaction Details
       </h1>
       {actionData?.error ? (
-        <p className="pb-2 text-base text-red-500">{actionData.error}</p>
+        <p className="text-red-500 pb-2 text-base">{actionData.error}</p>
       ) : null}
       <Form method="post" className="min-f-full flex flex-col gap-4">
         <FormInput label="Name" name="name" placeholder="Gym membership" />
+        <FormDatePicker label="Date" name="date" />
         <FormInput
           label="Amount Spent"
           name="amount"
@@ -101,11 +107,15 @@ export default function NewTransaction() {
         <FormCategories
           options={[
             {
-              color: "bg-red-300",
+              color: "bg-green",
+              value: "💰",
+            },
+            {
+              color: "bg-red",
               value: "⛽️",
             },
             {
-              color: "bg-yellow-200",
+              color: "bg-yellow",
               value: "🚕",
             },
             {
@@ -113,7 +123,7 @@ export default function NewTransaction() {
               value: "🍔",
             },
             {
-              color: "bg-yellow-100",
+              color: "bg-amber-700",
               value: "☕️",
             },
             {
@@ -133,13 +143,13 @@ export default function NewTransaction() {
           name="category"
         />
         <div className="mt-8 flex flex-col gap-3">
-          <button className="flex w-full flex-1 items-center justify-between rounded-lg bg-slate-700 py-2 px-3 text-white">
+          <button className="flex w-full flex-1 items-center justify-between rounded-lg bg-purple py-2 px-3 text-white">
             <span className="text-base font-semibold uppercase">create</span>
             <CheckIcon className="h-5 w-5 stroke-white" />
           </button>
           <Link
             to="/"
-            className="flex w-full flex-1 items-center justify-between rounded-lg bg-red-500 py-2 px-3 text-white"
+            className="flex w-full flex-1 items-center justify-between rounded-lg bg-black-100 py-2 px-3 text-white"
           >
             <span className="text-base font-semibold uppercase">cancel</span>
             <XMarkIcon className="h-5 w-5 stroke-white" />
@@ -160,12 +170,12 @@ const FormTextarea = ({
   placeholder: string;
 }) => {
   return (
-    <div className="flex flex-col gap-2 text-slate-900">
+    <div className="flex flex-col gap-2 text-white">
       <label className="text-lg font-medium">{label}</label>
       <textarea
         name={name}
         placeholder={placeholder}
-        className="rounded-lg bg-white p-4 font-inter placeholder:text-gray-500"
+        className="rounded-lg bg-black-100 p-4 font-inter placeholder:text-gray-200"
       />
     </div>
   );
@@ -182,14 +192,14 @@ const FormRadioGroup = ({
 }) => {
   const [selected, setSelected] = useState(options[0].value);
   return (
-    <div className="flex flex-col gap-2 text-slate-900">
+    <div className="flex flex-col gap-2 text-white">
       <label className="text-lg font-medium">{label}</label>
       <RadioGroupPrimitive.Root
         name={name}
         required
         defaultValue={options?.[0].value}
         onValueChange={(val) => setSelected(val)}
-        className="flex rounded-xl bg-white p-[6px]"
+        className="flex rounded-xl bg-black-200 p-[6px]"
       >
         {options.map((option) => (
           <RadioItem key={option.value} {...option} selected={selected} />
@@ -216,11 +226,11 @@ const RadioItem = ({
         id={value}
         className="group relative w-full cursor-pointer px-4 py-2"
       >
-        <RadioGroupPrimitive.Indicator className="absolute inset-0 rounded-md bg-slate-700" />
+        <RadioGroupPrimitive.Indicator className="absolute inset-0 rounded-md bg-black-100" />
         <label
           className={clsx(
             "relative whitespace-nowrap text-center font-inter text-base font-medium transition-colors duration-100 ease-out",
-            isSelected ? "text-white" : "text-slate-900"
+            isSelected ? "text-white" : "text-white"
           )}
           htmlFor={value}
         >
@@ -241,7 +251,7 @@ const FormCategories = ({
   options: Array<{ color: string; value: string }>;
 }) => {
   return (
-    <div className="flex max-w-full flex-col gap-3 text-slate-900">
+    <div className="flex max-w-full flex-col gap-3 text-white">
       <label className="text-lg font-medium">{label}</label>
       <RadioGroupPrimitive.Root
         name={name}

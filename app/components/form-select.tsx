@@ -2,6 +2,7 @@ import { ChevronDownIcon, ChevronUpIcon } from "@heroicons/react/24/outline";
 import * as Select from "@radix-ui/react-select";
 import clsx from "clsx";
 import { useState } from "react";
+import useMeasure from "react-use-measure";
 
 const FormSelect = ({
   label,
@@ -15,9 +16,12 @@ const FormSelect = ({
   className?: string;
 }) => {
   const [selected, onSelect] = useState(options[0]);
+  const [ref, bounds] = useMeasure();
   return (
-    <div className="flex flex-col gap-1 text-slate-900">
-      <label className="text-lg font-medium">{label}</label>
+    <div className="flex flex-col gap-1 text-white">
+      <label ref={ref} className="text-lg font-medium">
+        {label}
+      </label>
       <Select.Root
         name={name}
         value={selected.value}
@@ -31,22 +35,20 @@ const FormSelect = ({
       >
         <Select.Trigger
           className={clsx(
-            "flex items-center justify-between rounded-lg border-2 bg-white py-3 px-4 focus:!outline-none",
+            "flex items-center justify-between rounded-lg border-2 bg-black-100 py-3 px-4 focus:!outline-none",
             className
           )}
         >
           <Select.Value asChild className="flex items-center">
-            <p className="text-lg font-medium text-slate-900">
-              {selected.label}
-            </p>
+            <p className="text-lg font-medium text-white">{selected.label}</p>
           </Select.Value>
           <Select.Icon asChild>
-            <ChevronDownIcon className="h-4 w-4 stroke-slate-900 stroke-[3]" />
+            <ChevronDownIcon className="h-4 w-4 stroke-white stroke-[3]" />
           </Select.Icon>
         </Select.Trigger>
 
         <Select.Portal>
-          <Select.Content className="z-[9999] min-w-fit rounded-xl bg-gray-900 p-1 shadow-md">
+          <Select.Content className="z-[9999] min-w-fit rounded-xl bg-black-200 p-1 shadow-md">
             <Select.ScrollUpButton className="ml-auto mr-auto p-1">
               <ChevronUpIcon className="h-4 w-4 stroke-white stroke-2" />
             </Select.ScrollUpButton>
@@ -72,7 +74,7 @@ const FormSelect = ({
 const SelectItem = ({ label, value }: { label: string; value: string }) => (
   <Select.Item
     value={value}
-    className="group flex w-full items-center justify-center gap-6 rounded-lg py-2 outline-none hover:bg-gray-700 focus-visible:!outline-none"
+    className="group flex w-full items-center justify-center gap-6 rounded-lg py-2 outline-none hover:bg-black-100 focus-visible:!outline-none"
   >
     <Select.ItemText>
       <p className="text-center text-lg font-medium text-white">{label}</p>

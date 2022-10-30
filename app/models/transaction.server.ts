@@ -44,6 +44,7 @@ const createTransaction = async ({
   type,
   label,
   userId,
+  date,
 }: {
   name: string;
   amount: number;
@@ -51,6 +52,7 @@ const createTransaction = async ({
   type: string;
   label: string;
   userId: string;
+  date: Date;
 }) => {
   const transaction = await db.transaction.create({
     data: {
@@ -60,6 +62,7 @@ const createTransaction = async ({
       type,
       label,
       userId,
+      createdAt: date,
     },
   });
 

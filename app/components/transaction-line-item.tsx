@@ -13,16 +13,16 @@ const TransactionLineItem = ({
           {transaction.label}
         </h4>
         <div>
-          <h3 className="pb-1 text-base font-medium text-slate-900">
+          <h3 className="pb-1 text-base font-medium text-gray-100">
             {transaction.name}
           </h3>
           <p
             className={clsx(
               transaction.type === "need"
-                ? "bg-teal-600"
-                : transaction.type === "splurge"
-                ? "bg-violet-500"
-                : "bg-red-600",
+                ? "bg-green"
+                : transaction.type === "nice-to-have"
+                ? "bg-yellow"
+                : "bg-red",
               "w-fit rounded-full px-2 py-1 text-xs font-medium text-white"
             )}
           >
@@ -30,7 +30,7 @@ const TransactionLineItem = ({
           </p>
         </div>
       </div>
-      <h3 className="text-base font-medium tabular-nums text-slate-900">
+      <h3 className="text-base font-medium tabular-nums text-gray-100">
         $
         {Number(
           new Intl.NumberFormat().format(transaction.amount / 100)

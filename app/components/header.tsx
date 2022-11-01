@@ -27,7 +27,7 @@ const Header = () => {
         user && "backdrop-blur-[2px]"
       )}
     >
-      <Link to="/" className="text-4xl font-semibold">
+      <Link to="/" prefetch="render" className="text-4xl font-semibold">
         💸
       </Link>
       {user ? <MobileMenu /> : null}
@@ -108,7 +108,7 @@ const MobileMenu = () => {
                     icon={<BanknotesIcon className="h-5 w-5  stroke-white" />}
                   />
                   <MenuItem
-                    to="/"
+                    to="/calendar"
                     title="Calendar View"
                     variants={variants}
                     icon={
@@ -140,6 +140,7 @@ const MenuItem = ({
   return (
     <motion.div variants={variants}>
       <Link
+        prefetch="render"
         to={to}
         className="flex items-center justify-between rounded-lg bg-black-200 px-3 py-4"
       >

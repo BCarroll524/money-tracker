@@ -13,12 +13,12 @@ const TransactionLineItem = ({
 
   return (
     <article className="flex items-center gap-3">
-      <span id={transaction.id} className="-mt-48 pb-48" />
-      <div className="relative p-1">
-        <span className="absolute top-1 scale-110 text-[32px] opacity-50  blur-sm transition-transform will-change-transform">
+      <span id={transaction.id} className="-mt-48 -ml-3 pb-48" />
+      <div className="relative rounded-md bg-black-100 p-3">
+        <span className="absolute scale-110 text-xl leading-none  opacity-50 blur-sm">
           {transaction.label}
         </span>
-        <div className="relative text-[32px]">{transaction.label}</div>
+        <div className="relative text-xl leading-none">{transaction.label}</div>
       </div>
       <div className="flex flex-1 flex-col">
         <div className="flex justify-between">
@@ -31,15 +31,12 @@ const TransactionLineItem = ({
             ) : null}
           </h3>
           <h3 className="text-base font-medium tabular-nums text-gray-100">
-            $
-            {Number(
-              new Intl.NumberFormat().format(transaction.amount / 100)
-            ).toFixed(2)}
+            ${new Intl.NumberFormat().format(transaction.amount / 100)}
           </h3>
         </div>
         <div
           className={clsx(
-            "ml-auto mr-4 h-3 w-3 rounded-full bg-white",
+            "ml-auto mr-4 h-[10px] w-[10px] rounded-full bg-white",
             transaction.type === "need"
               ? "bg-green"
               : transaction.type === "nice-to-have"

@@ -82,6 +82,7 @@ export default function Home() {
         </p>
       </div>
       <Link
+        prefetch="render"
         to="/transaction/new"
         className="mx-auto mt-3 mb-5 flex w-fit items-center justify-center gap-2 rounded-lg bg-black-100 py-1 px-3"
       >

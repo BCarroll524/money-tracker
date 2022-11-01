@@ -16,7 +16,7 @@ const TransactionsGrouped = ({
       <div className="flex items-baseline justify-between pb-4">
         <h2 className="text-base font-semibold text-white">{dateLabel}</h2>
         <h2 className="text-lg font-semibold text-white">
-          ${Number(new Intl.NumberFormat().format(sum / 100)).toFixed(2)}
+          ${new Intl.NumberFormat().format(sum / 100)}
         </h2>
       </div>
       <div className="flex flex-col gap-3">

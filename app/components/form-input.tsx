@@ -20,7 +20,7 @@ const FormInput = forwardRef<Ref, Props>(
           type={type}
           name={name}
           placeholder={placeholder}
-          className="rounded-lg bg-black-100 py-3 px-4 font-inter placeholder:text-gray-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-purple"
+          className="rounded-lg bg-black-100 py-3 px-4 font-inter placeholder:text-gray-200 focus:ring-purple"
           {...rest}
         />
       </div>

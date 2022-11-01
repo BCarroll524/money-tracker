@@ -8,9 +8,17 @@ const TransactionsGrouped = ({
   transactions: TrakrTransaction[];
   dateLabel: string;
 }) => {
+  const sum = transactions.reduce((acc, transaction) => {
+    return acc + transaction.amount;
+  }, 0);
   return (
     <section className="px-5 pt-3 odd:bg-black-200">
-      <h2 className="pb-4 text-base font-semibold text-white">{dateLabel}</h2>
+      <div className="flex items-baseline justify-between pb-4">
+        <h2 className="text-base font-semibold text-white">{dateLabel}</h2>
+        <h2 className="text-lg font-semibold text-white">
+          ${Number(new Intl.NumberFormat().format(sum / 100)).toFixed(2)}
+        </h2>
+      </div>
       <div className="flex flex-col gap-3">
         {transactions.map((transaction) => (
           <TransactionLineItem transaction={transaction} key={transaction.id} />

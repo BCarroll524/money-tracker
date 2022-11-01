@@ -5,7 +5,7 @@ import {
   ChevronLeftIcon,
 } from "@heroicons/react/24/solid";
 import { Form, Link } from "@remix-run/react";
-import * as Popover from "@radix-ui/react-dialog";
+import * as Dialog from "@radix-ui/react-dialog";
 import type { Variants } from "framer-motion";
 import { AnimatePresence, motion } from "framer-motion";
 import { useState } from "react";
@@ -13,6 +13,7 @@ import {
   ArrowLeftOnRectangleIcon,
   CalendarDaysIcon,
   BanknotesIcon,
+  DocumentTextIcon,
 } from "@heroicons/react/24/outline";
 import { useOptionalUser } from "~/utils";
 import clsx from "clsx";
@@ -51,14 +52,15 @@ const MobileMenu = () => {
   };
 
   return (
-    <Popover.Root open={open} onOpenChange={(val) => setOpen(val)}>
-      <Popover.Trigger>
+    <Dialog.Root open={open} onOpenChange={(val) => setOpen(val)}>
+      <Dialog.Trigger>
         <Bars3Icon className="h-6 w-6 fill-white stroke-white" />
-      </Popover.Trigger>
+      </Dialog.Trigger>
       <AnimatePresence>
         {open ? (
-          <Popover.Portal forceMount>
-            <Popover.Content>
+          <Dialog.Portal forceMount>
+            <Dialog.Overlay />
+            <Dialog.Content onOpenAutoFocus={(e) => e.preventDefault()}>
               <motion.div
                 className="fixed inset-0 bg-black-100 px-5 pt-9"
                 initial={{ x: "100%" }}
@@ -84,6 +86,14 @@ const MobileMenu = () => {
                   className="flex flex-col gap-4"
                 >
                   <MenuItem
+                    to="/transaction/text"
+                    title="Add Transaction From Text"
+                    variants={variants}
+                    icon={
+                      <DocumentTextIcon className="h-5 w-5  stroke-white" />
+                    }
+                  />
+                  <MenuItem
                     to="/"
                     title="Add Recurring Transaction"
                     variants={variants}
@@ -108,11 +118,11 @@ const MobileMenu = () => {
                   <Logout variants={variants} />
                 </motion.div>
               </motion.div>
-            </Popover.Content>
-          </Popover.Portal>
+            </Dialog.Content>
+          </Dialog.Portal>
         ) : null}
       </AnimatePresence>
-    </Popover.Root>
+    </Dialog.Root>
   );
 };
 

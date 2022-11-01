@@ -14,12 +14,12 @@ const seedTransaction = async (userId: string, sources: string[]) => {
   const randomSource = randomItem(sources);
   const randomType = randomItem(["need", "nice-to-have", "splurge"]);
   const randomLabel = randomItem(["🏋🏻", "☕️", "⛽️"]);
-  const randomAmount = Math.round(Math.random() * 100 * 100) / 100;
-  const randomDaysFrom = Math.round(Math.random() * 60);
+  const randomAmount = Math.round(Math.random() * 10000);
+  const randomDaysFrom = Math.round(Math.random() * 15);
   const date = new Date();
   const randomDate = sub(date, { days: randomDaysFrom });
 
-  const transaction = await db.transaction.create({
+  await db.transaction.create({
     data: {
       name: faker.commerce.productName(),
       shortDescription: faker.commerce.productDescription(),
@@ -32,3 +32,17 @@ const seedTransaction = async (userId: string, sources: string[]) => {
     },
   });
 };
+
+(async () => {
+  const users = await db.user.findMany();
+  const sources = await db.source.findMany();
+
+  for (const user of users) {
+    for (let i = 0; i < 50; i++) {
+      await seedTransaction(
+        user.id,
+        sources.map((s) => s.id)
+      );
+    }
+  }
+})();

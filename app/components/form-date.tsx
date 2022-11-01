@@ -11,7 +11,6 @@ import {
   endOfMonth,
   endOfWeek,
   format,
-  getTime,
   isEqual,
   isSameMonth,
   isToday,
@@ -78,7 +77,7 @@ const FormDatePicker = ({ label, name }: { label: string; name: string }) => {
           onClick={() => setOpen(true)}
           className={clsx(
             "rounded-lg bg-black-100 py-3 px-4 text-left font-inter",
-            open ? "outline outline-2 outline-purple" : undefined
+            open ? "ring" : undefined
           )}
         >
           {format(date, "EEE, MMMM do, yyyy")}

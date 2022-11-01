@@ -169,3 +169,33 @@ export function getErrorMessage(error: unknown) {
   if (error instanceof Error) return error.message;
   return "Unknown Error";
 }
+
+// Rapid Rewards Premier Card: You made a $18.74 transaction with TST* PRIME PIZZA - P on Oct 30, 2022 at 10:04 PM ET
+// Chase Sapphire Preferred: You made a $15.93 transaction with UBER   *ALFALFA on Oct 30, 2022 at 1:04 PM ET.
+
+export function parseTransactionText(text: string) {
+  const [, transaction] = text.split("You made a $");
+  const [amount, rest] = transaction.split(" transaction with ");
+  const [merchant, date] = rest.split(" on ");
+  const [day, timeWithTZ] = date.split(" at ");
+  const [time] = timeWithTZ.split(" ET");
+
+  const parsedDay = parse(day, "MMM dd, yyyy", new Date());
+  const parsedTime = parse(time, "h:mm a", new Date());
+  const hour = parsedTime.getHours();
+  const minute = parsedTime.getMinutes();
+
+  parsedDay.setHours(hour, minute);
+
+  console.log(parsedDay.getTime());
+
+  return {
+    amount: Number(amount),
+    merchant,
+    rawDay: day,
+    rawTime: time,
+    day: parsedDay,
+    hour,
+    minute,
+  };
+}

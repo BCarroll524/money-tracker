@@ -3,6 +3,7 @@ import type { LoaderArgs } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import { Link, useLoaderData } from "@remix-run/react";
 import { startOfDay } from "date-fns";
+import { useEffect } from "react";
 import type { TrakrHandle, TrakrTransaction } from "types";
 import { Header } from "~/components/header";
 import { TransactionsGrouped } from "~/components/transactions-grouped";
@@ -26,9 +27,13 @@ export const loader = async ({ request }: LoaderArgs) => {
     getTotalSpent(user.id),
   ]);
 
+  const url = new URL(request.url);
+  const newTransactionId = url.searchParams.get("tId");
+
   return json({
     totalSpent,
     transactions,
+    newTransactionId,
   });
 };
 
@@ -51,10 +56,20 @@ export default function Home() {
   const spendingDiff = getSpendingDiff(data.transactions);
   const totalSpent = (data.totalSpent / 100).toFixed(2).toString().split(".");
   const transactionGroups = groupTransactions(data.transactions);
+
+  useEffect(() => {
+    if (data.newTransactionId) {
+      const element = document.getElementById(data.newTransactionId);
+      // document.e
+      element?.scrollIntoView({ behavior: "smooth" });
+      element?.focus();
+    }
+  }, [data.newTransactionId]);
+
   return (
     <section>
       <Header />
-      <div className="flex flex-col items-center justify-center pt-[68px] text-white">
+      <div className="isolation flex flex-col items-center justify-center pt-[68px] text-white">
         <h1 className="text-2xl font-semibold uppercase tracking-wide">
           Total Spent
         </h1>

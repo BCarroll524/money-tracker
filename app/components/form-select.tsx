@@ -15,6 +15,7 @@ const FormSelect = ({
   options: { label: string; value: string }[];
   className?: string;
 }) => {
+  const [open, setOpen] = useState(false);
   const [selected, onSelect] = useState(options[0]);
   const [ref, bounds] = useMeasure();
   return (
@@ -23,6 +24,8 @@ const FormSelect = ({
         {label}
       </label>
       <Select.Root
+        open={open}
+        onOpenChange={(open) => setOpen(open)}
         name={name}
         value={selected.value}
         onValueChange={(v) => {
@@ -35,7 +38,8 @@ const FormSelect = ({
       >
         <Select.Trigger
           className={clsx(
-            "flex items-center justify-between rounded-lg border-2 bg-black-100 py-3 px-4 focus:!outline-none",
+            "flex items-center justify-between rounded-lg bg-black-100 py-3 px-4",
+            open ? "ring" : "",
             className
           )}
         >

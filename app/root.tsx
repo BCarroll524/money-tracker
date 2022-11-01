@@ -22,6 +22,7 @@ export const links: LinksFunction = () => {
     { rel: "stylesheet", href: tailwindStylesheetUrl },
     { rel: "stylesheet", href: globalStyles },
     { rel: "stylesheet", href: fontStyles },
+    { rel: "manifest", href: "/site.webmanifest" },
   ];
 };
 
@@ -31,6 +32,7 @@ export const meta: MetaFunction = () => ({
   description:
     "Everyone wants more financially. We are here to help you start! We do this by allowing you to keep track of your spending and being able to visualize your habits.",
   viewport: "width=device-width,initial-scale=1",
+  "apple-mobile-web-app-status-bar-style": "black-translucent",
 });
 
 export async function loader({ request }: LoaderArgs) {

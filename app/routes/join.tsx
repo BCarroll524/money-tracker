@@ -115,7 +115,7 @@ export default function Join() {
                 placeholder="Enter your email"
                 aria-invalid={actionData?.errors?.email ? true : undefined}
                 aria-describedby="email-error"
-                className="w-full rounded-lg bg-black-100 px-3 py-[10px] text-white  placeholder:text-gray-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-purple"
+                className="w-full rounded-lg bg-black-100 px-3 py-[10px] text-white  placeholder:text-gray-200 "
               />
               {actionData?.errors?.email && (
                 <div className="text-red-500 pt-1" id="email-error">
@@ -141,7 +141,7 @@ export default function Join() {
                 autoComplete="current-password"
                 aria-invalid={actionData?.errors?.password ? true : undefined}
                 aria-describedby="password-error"
-                className="w-full rounded-lg bg-black-100 px-3 py-[10px] text-white placeholder:text-gray-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-purple"
+                className="w-full rounded-lg bg-black-100 px-3 py-[10px] text-white placeholder:text-gray-200 "
               />
               {actionData?.errors?.password && (
                 <div className="pt-1 text-red" id="password-error">

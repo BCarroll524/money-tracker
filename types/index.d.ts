@@ -19,7 +19,8 @@ type TrakrHandle = {
 type TrakrSource = {
   id: string;
   name: string;
-  type: string;
+  type: "debit_card" | "credit_card" | "checking_account" | "savings_account";
+  balance: number;
   userId: string;
   transactions?: TrakrTransaction[];
 };

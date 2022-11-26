@@ -24,6 +24,7 @@ import type { TrakrHandle, TrakrTransaction } from "types";
 import { Header } from "~/components/header";
 import { MonthSpendingForCategory } from "~/components/spend-by-category";
 import { getUsersTransactions } from "~/models/transaction.server";
+import { formatMoney } from "~/utils";
 import { useSSRLayoutEffect } from "~/utils/misc";
 import { requireUser } from "~/utils/session.server";
 
@@ -194,7 +195,7 @@ export default function Calendar() {
             Spending this month
           </h2>
           <h2 className="text-lg font-semibold text-white">
-            ${new Intl.NumberFormat().format(monthSum / 100)}
+            {formatMoney(monthSum / 100)}
           </h2>
         </div>
         <div className="space-y-4">

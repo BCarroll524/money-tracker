@@ -16,13 +16,16 @@ import globalStyles from "./styles/reset.css";
 import fontStyles from "./styles/font.css";
 import { getUser } from "./utils/session.server";
 import type { TrakrHandle } from "types";
+import { getSplashScreenLinks } from "./splash-screen-links";
 
 export const links: LinksFunction = () => {
+  const splashScreenLinks = getSplashScreenLinks();
   return [
     { rel: "stylesheet", href: tailwindStylesheetUrl },
     { rel: "stylesheet", href: globalStyles },
     { rel: "stylesheet", href: fontStyles },
     { rel: "manifest", href: "/site.webmanifest" },
+    ...splashScreenLinks,
   ];
 };
 
@@ -32,7 +35,8 @@ export const meta: MetaFunction = () => ({
   description:
     "Everyone wants more financially. We are here to help you start! We do this by allowing you to keep track of your spending and being able to visualize your habits.",
   viewport: "width=device-width,initial-scale=1",
-  "apple-mobile-web-app-status-bar-style": "black-translucent",
+  "apple-mobile-web-app-status-bar-style": "black",
+  "apple-mobile-web-app-capable": "yes",
 });
 
 export async function loader({ request }: LoaderArgs) {

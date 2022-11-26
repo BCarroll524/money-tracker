@@ -66,6 +66,15 @@ const createTransaction = async ({
     },
   });
 
+  await db.source.update({
+    where: { id: sourceId },
+    data: {
+      balance: {
+        decrement: amount,
+      },
+    },
+  });
+
   return transaction;
 };
 

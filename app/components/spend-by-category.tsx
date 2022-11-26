@@ -1,4 +1,5 @@
 import clsx from "clsx";
+import { formatMoney } from "~/utils";
 
 const MonthSpendingForCategory = ({
   label,
@@ -30,13 +31,13 @@ const MonthSpendingForCategory = ({
       >
         {widthPercent > 50 ? (
           <p className="px-2 text-right text-xs font-medium tabular-nums leading-none text-white">
-            ${new Intl.NumberFormat().format(amount / 100)}
+            {formatMoney(amount / 100)}
           </p>
         ) : null}
       </div>
       {widthPercent <= 50 ? (
         <p className="-ml-1 text-sm font-medium tabular-nums leading-none text-white">
-          ${new Intl.NumberFormat().format(amount / 100)}
+          {formatMoney(amount / 100)}
         </p>
       ) : null}
     </article>

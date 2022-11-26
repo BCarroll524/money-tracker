@@ -66,7 +66,7 @@ export const action = async ({ request }: ActionArgs) => {
     const user = await requireUser(request);
     const paymentMethods = await getUsersSources(user.id);
     if (paymentMethods.length) {
-      return redirect("/");
+      return redirect("/home");
     }
     return redirect("/welcome?page=3");
   }

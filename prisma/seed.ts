@@ -1,6 +1,6 @@
 import { PrismaClient } from "@prisma/client";
 import bcrypt from "bcryptjs";
-import sub from "date-fns/sub";
+import { seedTransaction } from "./seed-transactions";
 
 const prisma = new PrismaClient();
 
@@ -27,64 +27,50 @@ async function seed() {
   });
 
   // lets add a couple transactions
-  const chaseCreditCard = await prisma.source.create({
+  await prisma.source.create({
     data: {
-      name: "Chase Preferred Card",
+      name: "Chase Sapphire Preferred",
       type: "credit_card",
       userId: user.id,
+      balance: -100000,
     },
   });
 
-  const southwestCard = await prisma.source.create({
+  await prisma.source.create({
     data: {
-      name: "Southwest Travel Card",
+      name: "Rapid Rewards Premier Card",
       type: "credit_card",
       userId: user.id,
+      balance: -25000,
     },
   });
 
-  const wellsAccount = await prisma.source.create({
+  await prisma.source.create({
     data: {
       name: "Wells Fargo Checking Account",
-      type: "bank_account",
+      type: "checking_account",
       userId: user.id,
+      balance: 140000,
     },
   });
 
-  await prisma.transaction.createMany({
-    data: [
-      {
-        name: "Equinox Membership",
-        shortDescription: "Equinox monthly fee",
-        amount: 25000,
-        sourceId: chaseCreditCard.id,
-        label: "🏋🏻",
-        type: "splurge",
-        userId: user.id,
-        createdAt: new Date(),
-      },
-      {
-        name: "Little Lunch",
-        shortDescription: "morning coffee",
-        amount: 515,
-        sourceId: southwestCard.id,
-        label: "☕️",
-        type: "nice-to-have",
-        userId: user.id,
-        createdAt: sub(new Date(), { days: 2 }),
-      },
-      {
-        name: "Costco Gas",
-        shortDescription: "Bi weekly fill up",
-        amount: 4829,
-        sourceId: wellsAccount.id,
-        label: "⛽️",
-        type: "need",
-        userId: user.id,
-        createdAt: sub(new Date(), { days: 5 }),
-      },
-    ],
+  await prisma.source.create({
+    data: {
+      name: "Wells Fargo Savings Account",
+      type: "savings_account",
+      userId: user.id,
+      balance: 5000,
+    },
   });
+
+  const sources = await prisma.source.findMany();
+
+  for (let i = 0; i < 50; i++) {
+    await seedTransaction(
+      user.id,
+      sources.map((s) => s.id)
+    );
+  }
 
   console.log(`Database has been seeded. 🌱`);
 }

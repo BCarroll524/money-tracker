@@ -14,7 +14,7 @@ import type { TrakrHandle, TrakrTransaction } from "types";
 
 import type { User } from "~/models/user.server";
 
-const DEFAULT_REDIRECT = "/";
+const DEFAULT_REDIRECT = "/home";
 
 /**
  * This should be used any time the redirect path is user-provided
@@ -90,8 +90,10 @@ export function validateEmail(email: unknown): email is string {
   return typeof email === "string" && email.length > 3 && email.includes("@");
 }
 
-export function formatMoney(amount: number) {
-  return new Intl.NumberFormat("en-US", {}).format(amount);
+export function formatMoney(amount: number, decimals = true) {
+  return new Intl.NumberFormat("en-US", {
+    minimumFractionDigits: decimals ? 2 : 0,
+  }).format(amount);
 }
 
 export function groupTransactions(transactions: TrakrTransaction[]) {

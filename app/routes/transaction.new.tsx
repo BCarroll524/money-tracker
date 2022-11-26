@@ -55,7 +55,7 @@ export const action = async ({ request }: ActionArgs) => {
       date: transactionDate,
     });
 
-    return redirect("/?tId=" + transaction.id);
+    return redirect("/home?tId=" + transaction.id);
   } catch (error: unknown) {
     const message = getErrorMessage(error);
     return json({ error: message }, { status: 400 });
@@ -146,7 +146,7 @@ export default function NewTransaction() {
             <CheckIcon className="h-5 w-5 stroke-white" />
           </button>
           <Link
-            to="/"
+            to="/home"
             className="flex w-full flex-1 items-center justify-between rounded-lg bg-black-100 py-3 px-3 text-white"
           >
             <span className="text-base font-semibold uppercase">cancel</span>

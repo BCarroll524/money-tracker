@@ -1,4 +1,5 @@
 import type { TrakrTransaction } from "types";
+import { formatMoney } from "~/utils";
 import { TransactionLineItem } from "./transaction-line-item";
 
 const TransactionsGrouped = ({
@@ -12,11 +13,12 @@ const TransactionsGrouped = ({
     return acc + transaction.amount;
   }, 0);
   return (
-    <section className="px-5 pt-3 odd:bg-black-200">
+    <section className="px-5 pt-3 even:bg-black-200">
       <div className="flex items-baseline justify-between pb-4">
         <h2 className="text-base font-semibold text-white">{dateLabel}</h2>
         <h2 className="text-lg font-semibold text-white">
-          ${new Intl.NumberFormat().format(sum / 100)}
+          <span className="pr-[1px] text-sm">$</span>
+          {formatMoney(sum / 100)}
         </h2>
       </div>
       <div className="flex flex-col gap-3">

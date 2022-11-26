@@ -1,6 +1,7 @@
 import { useSearchParams } from "@remix-run/react";
 import clsx from "clsx";
 import type { TrakrTransaction } from "types";
+import { formatMoney } from "~/utils";
 
 const TransactionLineItem = ({
   transaction,
@@ -31,7 +32,8 @@ const TransactionLineItem = ({
             ) : null}
           </h3>
           <h3 className="text-base font-medium tabular-nums text-gray-100">
-            ${new Intl.NumberFormat().format(transaction.amount / 100)}
+            <span className="pr-[1px] text-xs">$</span>
+            {formatMoney(transaction.amount / 100)}
           </h3>
         </div>
         <div

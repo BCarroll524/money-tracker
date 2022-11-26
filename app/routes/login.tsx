@@ -22,7 +22,7 @@ export const handle: TrakrHandle & { id: string } = {
 
 export async function loader({ request }: LoaderArgs) {
   const userId = await getUserId(request);
-  if (userId) return redirect("/");
+  if (userId) return redirect("/home");
   return json({});
 }
 
@@ -30,7 +30,7 @@ export async function action({ request }: ActionArgs) {
   const formData = await request.formData();
   const email = formData.get("email");
   const password = formData.get("password");
-  const redirectTo = safeRedirect(formData.get("redirectTo"), "/");
+  const redirectTo = safeRedirect(formData.get("redirectTo"), "/home");
   const remember = formData.get("remember");
 
   if (!validateEmail(email)) {
@@ -74,7 +74,7 @@ export async function action({ request }: ActionArgs) {
 export default function LoginPage() {
   const fetcher = useFetcher();
   const [searchParams] = useSearchParams();
-  const redirectTo = searchParams.get("redirectTo") || "/";
+  const redirectTo = searchParams.get("redirectTo") || "/home";
   const actionData = useActionData<typeof action>();
   const emailRef = React.useRef<HTMLInputElement>(null);
   const passwordRef = React.useRef<HTMLInputElement>(null);

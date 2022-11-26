@@ -17,7 +17,7 @@ export const handle: TrakrHandle & { id: string } = {
 
 export async function loader({ request }: LoaderArgs) {
   const userId = await getUserId(request);
-  if (userId) return redirect("/");
+  if (userId) return redirect("/home");
   return json({});
 }
 

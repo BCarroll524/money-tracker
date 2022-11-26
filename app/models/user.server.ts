@@ -77,6 +77,7 @@ const getUsersSources = async (userId: string) => {
     id: source.id,
     name: source.name,
     type: source.type,
+    balance: source.balance,
     userId: source.userId,
   }));
 

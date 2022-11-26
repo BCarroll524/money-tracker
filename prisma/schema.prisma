@@ -45,6 +45,7 @@ model Source {
   id           String        @id @default(cuid())
   name         String        @db.VarChar()
   type         SourceType
+  balance      Int           @default(0)
   transactions Transaction[]
   userId       String
   user         User          @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
@@ -55,5 +56,6 @@ model Source {
 enum SourceType {
   debit_card
   credit_card
-  bank_account
+  checking_account
+  savings_account
 }

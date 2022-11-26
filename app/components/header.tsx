@@ -18,19 +18,30 @@ import {
 import { useOptionalUser } from "~/utils";
 import clsx from "clsx";
 
-const Header = () => {
+const Header = ({ title }: { title?: string }) => {
   const user = useOptionalUser();
   return (
     <header
       className={clsx(
-        "fixed top-0 left-0 right-0 flex items-center justify-between p-4",
+        "fixed top-0 left-0 right-0 z-[1] flex items-center justify-between p-4",
         user && "backdrop-blur-[2px]"
       )}
     >
-      <Link to="/" prefetch="render" className="text-4xl font-semibold">
+      <Link
+        to="/home"
+        prefetch="render"
+        className="flex-1 text-4xl font-semibold"
+      >
         💸
       </Link>
-      {user ? <MobileMenu /> : null}
+      {title ? (
+        <h1 className="text-lg font-medium text-gray-100">{title}</h1>
+      ) : null}
+      {user ? (
+        <div className="flex flex-1 justify-end">
+          <MobileMenu />
+        </div>
+      ) : null}
     </header>
   );
 };
@@ -62,7 +73,7 @@ const MobileMenu = () => {
             <Dialog.Overlay />
             <Dialog.Content onOpenAutoFocus={(e) => e.preventDefault()}>
               <motion.div
-                className="fixed inset-0 bg-black-100 px-5 pt-9"
+                className="fixed inset-0 z-[2] bg-black-100 px-5 pt-9"
                 initial={{ x: "100%" }}
                 animate={{ x: 0 }}
                 exit={{ x: "100%" }}
@@ -94,7 +105,7 @@ const MobileMenu = () => {
                     }
                   />
                   <MenuItem
-                    to="/"
+                    to="/home"
                     title="Add Recurring Transaction"
                     variants={variants}
                     icon={
@@ -102,7 +113,7 @@ const MobileMenu = () => {
                     }
                   />
                   <MenuItem
-                    to="/"
+                    to="/home"
                     title="Add Balances"
                     variants={variants}
                     icon={<BanknotesIcon className="h-5 w-5  stroke-white" />}

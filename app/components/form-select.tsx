@@ -2,7 +2,6 @@ import { ChevronDownIcon, ChevronUpIcon } from "@heroicons/react/24/outline";
 import * as Select from "@radix-ui/react-select";
 import clsx from "clsx";
 import { useState } from "react";
-import useMeasure from "react-use-measure";
 
 const FormSelect = ({
   label,
@@ -17,12 +16,9 @@ const FormSelect = ({
 }) => {
   const [open, setOpen] = useState(false);
   const [selected, onSelect] = useState(options[0]);
-  const [ref, bounds] = useMeasure();
   return (
     <div className="flex flex-col gap-1 text-white">
-      <label ref={ref} className="text-lg font-medium">
-        {label}
-      </label>
+      <label className="text-lg font-medium">{label}</label>
       <Select.Root
         open={open}
         onOpenChange={(open) => setOpen(open)}

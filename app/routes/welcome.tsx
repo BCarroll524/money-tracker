@@ -22,7 +22,7 @@ import { requireUser } from "~/utils/session.server";
 
 export const handle: TrakrHandle & { id: string } = {
   id: "onboarding",
-  backgroundColor: "bg-slate-200",
+  backgroundColor: "bg-black-100",
 };
 
 export const loader = async ({ request }: LoaderArgs) => {
@@ -114,7 +114,7 @@ const OnboardingNav = ({
       </p>
       <Pagination page={page} />
       {nextDisabled ? (
-        <p className="text-lg font-semibold text-purple">{nextText}</p>
+        <p className="text-lg font-semibold text-gray-100">{nextText}</p>
       ) : (
         <button
           form="welcome-form"
@@ -198,6 +198,7 @@ const Welcome2 = ({ defaultName }: { defaultName: string | undefined }) => {
             placeholder="John Doe"
             autoFocus
             defaultValue={name}
+            className="bg-black-200"
           />
         </Form>
       </div>
@@ -241,7 +242,7 @@ const Welcome3 = ({ paymentMethods }: { paymentMethods: TrakrSource[] }) => {
           <h2 className="text-center text-xl font-semibold">
             Now, lets add a payment type
           </h2>
-          <p className="text-center text-base font-normal">
+          <p className="text-center text-base font-normal text-gray-100">
             This is only used to label transactions
           </p>
         </div>
@@ -265,10 +266,12 @@ const Welcome3 = ({ paymentMethods }: { paymentMethods: TrakrSource[] }) => {
             name="paymentNickname"
             label="Payment Nickname"
             placeholder="Chase Credit Card"
+            className="bg-black-200"
           />
           <FormSelect
             name="type"
             label="Payment Type"
+            className="bg-black-200"
             options={[
               { label: "Credit Card", value: "credit_card" },
               {
@@ -284,7 +287,7 @@ const Welcome3 = ({ paymentMethods }: { paymentMethods: TrakrSource[] }) => {
           <button
             type="button"
             disabled={!isFormComplete}
-            className="text-center text-base font-medium text-slate-700 disabled:text-slate-300"
+            className="text-center text-base font-medium text-blue-500 disabled:text-blue-900"
             onClick={() =>
               fetcher.submit(
                 {

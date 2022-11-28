@@ -113,7 +113,7 @@ const MobileMenu = () => {
                     }
                   />
                   <MenuItem
-                    to="/home"
+                    to="/balances/add"
                     title="Add Balances"
                     variants={variants}
                     icon={<BanknotesIcon className="h-5 w-5  stroke-white" />}

@@ -54,15 +54,4 @@ const FeedToggle = ({ show }: { show: string }) => {
   );
 };
 
-const variants = {
-  feed: {
-    left: 0,
-    right: "unset",
-  },
-  balance: {
-    right: 0,
-    left: "unset",
-  },
-};
-
 export { FeedToggle };

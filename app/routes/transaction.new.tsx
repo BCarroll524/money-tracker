@@ -74,7 +74,7 @@ export default function NewTransaction() {
       {actionData?.error ? (
         <p className="pb-2 text-base text-red">{actionData.error}</p>
       ) : null}
-      <Form method="post" className="min-f-full flex flex-col gap-4">
+      <Form method="post" className="flex min-h-full flex-col gap-4">
         <FormInput label="Name" name="name" placeholder="Gym membership" />
         <FormDatePicker label="Date" name="date" />
         <FormInput
@@ -140,7 +140,7 @@ export default function NewTransaction() {
           label="Category"
           name="category"
         />
-        <div className="mt-8 flex flex-col gap-3">
+        <div className="mt-8 mb-6 flex flex-col gap-3">
           <button className="flex w-full flex-1 items-center justify-between rounded-lg bg-purple py-3 px-3 text-white">
             <span className="text-base font-semibold uppercase">create</span>
             <CheckIcon className="h-5 w-5 stroke-white" />

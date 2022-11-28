@@ -65,10 +65,10 @@ const Source = ({
       <h4 className="flex-1 pr-6 text-base font-medium text-gray-100">
         {source.name}
       </h4>
-      <p className="text-2xl text-white">
+      <p className="text-2xl tabular-nums text-white">
         <span className="-mb-[2px] pr-[1px] text-base">$</span>
         {formatMoney(Number(balance[0]), false)}
-        <span className="text-base">.{balance[1]}</span>
+        <span className="text-base tabular-nums">.{balance[1]}</span>
       </p>
     </article>
   );

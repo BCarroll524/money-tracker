@@ -1,0 +1,17 @@
+{
+  "$schema": "https://turbo.build/schema.json",
+  "pipeline": {
+    "build": {
+      "outputs": ["dist/**"]
+    },
+    "web#build": {
+      "dependsOn": ["^build"],
+      "env": ["DATABASE_URL", "SESSION_SECRET"],
+      "outputs": ["dist/**"]
+    },
+    "dev": {
+      "dependsOn": [],
+      "cache": false
+    }
+  }
+}
